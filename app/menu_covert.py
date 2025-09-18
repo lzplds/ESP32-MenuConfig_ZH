@@ -28,7 +28,7 @@ class ESP32MenuConverter:
     
     def __init__(self):
         self.running = True
-        self.version = "v1.0.0"  # 版本字段
+        self.version = "v1.0.1"  # 版本字段
         
     def clear_screen(self):
         """清屏"""
