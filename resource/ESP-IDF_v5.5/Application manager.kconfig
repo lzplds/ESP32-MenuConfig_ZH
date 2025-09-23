@@ -1,0 +1,50 @@
+menu "Application manager"
+
+    config APP_COMPILE_TIME_DATE
+        bool "使用时间/日期戳编译应用程序"
+        default y
+        depends on !APP_REPRODUCIBLE_BUILD
+        help
+            如果启用此选项，应用程序将使用当前的时间/日期戳进行编译。该时间/日期戳将存储在应用程序描述结构中。
+            如果禁用此选项，时间/日期戳将不会包含在应用程序镜像中。这在需要从相同源代码在不同时间构建出相同二进制镜像文件时非常有用。
+
+    config APP_EXCLUDE_PROJECT_VER_VAR
+        bool "从固件镜像中排除 PROJECT_VER"
+        default n
+        help
+            构建系统中的 PROJECT_VER 变量将不会影响固件镜像。
+            该值将不会包含在 esp_app_desc 结构体中。
+
+    config APP_EXCLUDE_PROJECT_NAME_VAR
+        bool "从固件镜像中排除 PROJECT_NAME"
+        default n
+        help
+            构建系统中的 PROJECT_NAME 变量将不会影响固件镜像。
+            该值将不会包含在 esp_app_desc 结构体中。
+
+    config APP_PROJECT_VER_FROM_CONFIG
+        bool "从 Kconfig 获取项目版本"
+        default n
+        help
+            如果启用此选项，那么 config 项 APP_PROJECT_VER 将用于变量 PROJECT_VER。
+            其他设置 PROJECT_VER 的方式将被忽略。
+
+    config APP_PROJECT_VER
+        string "项目版本"
+        default "1"
+        depends on APP_PROJECT_VER_FROM_CONFIG
+        help
+            Project version
+
+    config APP_RETRIEVE_LEN_ELF_SHA
+        int "APP ELF SHA 存储在 RAM 中的长度(字符)"
+        default 9
+        range 8 64
+        help
+            启动时，应用程序将从闪存中读取嵌入的 APP ELF SHA-256 哈希值，
+            并将其转换为字符串后存储在 RAM 缓冲区中。
+            这确保了即使在禁用缓存的情况下，崩溃处理器和核心转储也能够打印该字符串。
+            缓冲区的大小为 APP_RETRIEVE_LEN_ELF_SHA 加上空终止符。
+            修改此值将以字节为单位更改该缓冲区的大小。
+
+endmenu # "应用程序管理器"
